@@ -1,24 +1,28 @@
 <template>
-    <div class="root">
-      <ul>
-        <li v-for="item in page.list">
-          <div class="s-title" v-html="item.title" ></div>
-          <div class="s-content" v-html="item.content" ></div>
-        </li>
-      </ul>
-
-      <div class="block">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="page.pageNum"
-          :page-sizes="[10, 20, 50, 100]"
-          :page-size="page.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="page.total">
-        </el-pagination>
-      </div>
+  <div class="root">
+    <div class="searchbar">
+      <input  name="wd" class="s_ipt"  v-model="word"/><el-button type="primary" @click="handleSearch">搜索</el-button>
     </div>
+
+    <ul>
+      <li v-for="item in page.list">
+        <div class="s-title" v-html="item.title"></div>
+        <div class="s-content" v-html="item.content"></div>
+      </li>
+    </ul>
+
+    <div class="block" v-show="page.total>0">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="page.pageNum"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="page.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="page.total">
+      </el-pagination>
+    </div>
+  </div>
 
 </template>
 <script>
@@ -26,123 +30,96 @@
     methods: {
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
+        var requestBody={ pageNum:this.page.pageNum,pageSize:val,word:this.word};
+        this.search(requestBody);
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
+        var requestBody={ pageNum:val,pageSize:this.page.pageSize,word:this.word};
+        this.search(requestBody);
       },
-   handleEdit(index, row) {
-    console.log(index, row);
-  },
-  handleDelete(index, row) {
-    console.log(index, row);
-  }
+      handleEdit(index, row) {
+        console.log(index, row);
+      },
+      handleDelete(index, row) {
+        console.log(index, row);
+      },
+      handleSearch(){
+        var requestBody={ pageNum:1,pageSize:this.page.pageSize,word:this.word};
+        this.search(requestBody);
+      },
+      search(requestBody){
+        this.$http.post('article/search.json', requestBody).then((response) => {
+          if (response.status == 200) {
+            var responseJson = response.body;
+            if (responseJson.errcode == 200) {
+              this.page = responseJson.data;
+              return;
+            }
+          }
+
+        }, (response) => {
+          console.log(response);
+        });
+      }
+
     },
     data() {
       return {
-        "page": {
+          word:"",
+        page: {
           "pageNum": 1,
           "pageSize": 10,
-          "size": 10,
-          "startRow": 1,
-          "endRow": 10,
-          "total": 123,
-          "pages": 13,
+          "size": 0,
+          "startRow": 0,
+          "endRow": 0,
+          "total": 0,
+          "pages": 0,
           "list": [
-            {
-              "id": 259,
-              "title": "<em>标题</em>259",
-              "content": "内容259",
-              "type": "11",
-              "createtime": "2017-01-01"
-            },
-            {
-              "id": 271,
-              "title": "<em>标题</em>271",
-              "content": "内容271",
-              "type": "11",
-              "createtime": "2017-01-01"
-            },
-            {
-              "id": 306,
-              "title": "<em>标题</em>306",
-              "content": "内容306",
-              "type": "11",
-              "createtime": "2017-01-01"
-            },
-            {
-              "id": 309,
-              "title": "<em>标题</em>309",
-              "content": "内容309",
-              "type": "11",
-              "createtime": "2017-01-01"
-            },
-            {
-              "id": 325,
-              "title": "<em>标题</em>325",
-              "content": "内容325",
-              "type": "11",
-              "createtime": "2017-01-01"
-            },
-            {
-              "id": 328,
-              "title": "<em>标题</em>328",
-              "content": "内容328",
-              "type": "11",
-              "createtime": "2017-01-01"
-            },
-            {
-              "id": 350,
-              "title": "<em>标题</em>350",
-              "content": "内容350",
-              "type": "11",
-              "createtime": "2017-01-01"
-            },
-            {
-              "id": 79,
-              "title": "<em>标题</em>79",
-              "content": "内容79",
-              "type": "11",
-              "createtime": "2017-01-01"
-            },
-            {
-              "id": 89,
-              "title": "<em>标题</em>89",
-              "content": "内容89",
-              "type": "11",
-              "createtime": "2017-01-01"
-            },
-            {
-              "id": 411,
-              "title": "<em>标题</em>411",
-              "content": "内容411",
-              "type": "11",
-              "createtime": "2017-01-01"
-            }
+
           ]
         }
       };
     }
   }
 </script>
+<style>
+  em {
+    font-style: normal;
+    color: #a94442;
+  }
+</style>
 <style scoped>
-  em{font-style:normal; color: #a94442;}
+  .s_ipt {
+    width: 600px;
+    height: 35px;
+    font: 16px/18px arial;
+    line-height: 35px;
+    margin: 6px 10px 0 7px;
+    padding: 0;
+  }
+  .searchbar{
+    text-align: left;
+  }
 
-  .root{
-    width:100%;
-    padding:10px 100px;
+  .root {
+    width: 100%;
+    padding: 10px 100px;
     text-align: center;
   }
 
-  ul li{
+  ul li {
     text-align: left;
-    padding:10px;
+    padding: 10px;
   }
-  .s-title{
+
+  .s-title {
     line-height: 1.54;
     font-weight: 400;
     font-size: medium;
   }
-  .s-content{
+
+  .s-content {
     font-size: 13px;
   }
 
