@@ -1,7 +1,7 @@
 <template>
   <div class="root">
     <div class="searchbar">
-      <input  name="wd" class="s_ipt"  v-model="word"/><el-button type="primary" @click="handleSearch">搜索</el-button>
+      <input  name="wd" class="s_ipt"  v-model="word" v-on:keyup.enter="handleSearch"/><el-button type="primary" @click="handleSearch">搜索</el-button>
     </div>
 
     <ul>
