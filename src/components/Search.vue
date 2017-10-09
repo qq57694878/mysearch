@@ -5,8 +5,11 @@
     </div>
 
     <ul>
-      <li v-for="item in page.list">
-        <div class="s-title" v-html="item.title"></div>
+      <li v-for="item in detailUrl(page.list)">
+        <router-link  :to="{name:'Detail',params:{id:item.id}}"><div class="s-title" v-html="item.title"></div></router-link>
+        <!--
+        <router-link  :to="'/detail/'+item.id"><div class="s-title" v-html="item.title"></div></router-link>
+        -->
         <div class="s-content" v-html="item.content"></div>
       </li>
     </ul>
@@ -28,6 +31,15 @@
 <script>
   export default {
     methods: {
+      detailUrl(list){
+        return  list.filter(function (item) {
+          item.detailUrl="/detail/"+item.id;
+          return true;
+        })
+        return list.filter(function (number) {
+          return number % 2 === 0
+        })
+      },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
         var requestBody={ pageNum:this.page.pageNum,pageSize:val,word:this.word};
