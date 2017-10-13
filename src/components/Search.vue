@@ -6,7 +6,7 @@
 
     <ul>
       <li v-for="item in detailUrl(page.list)">
-        <router-link  :to="{name:'Detail',params:{id:item.id}}"><div class="s-title" v-html="item.title"></div></router-link>
+        <router-link target="_blank"  :to="{name:'Detail',params:{id:item.id}}"><div class="s-title" v-html="item.title"></div></router-link>
         <!--
         <router-link  :to="'/detail/'+item.id"><div class="s-title" v-html="item.title"></div></router-link>
         -->
