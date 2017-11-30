@@ -23,12 +23,12 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8888,
+    port: 9999,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/solrdemo': {
+      '/spmsearch': {
         target: 'http://localhost:8888',
         changeOrigin: true,
         logLevel: 'debug'

@@ -9,7 +9,7 @@ import VueResource from 'vue-resource'
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.use(VueResource)
-Vue.http.options.root = '/solrdemo';
+Vue.http.options.root = '/spmsearch';
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

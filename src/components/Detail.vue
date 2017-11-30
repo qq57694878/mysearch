@@ -21,7 +21,7 @@
       init(){
         var requestBody=this.id;
         console.log(requestBody);
-        this.$http.post('article/findOne.json', requestBody).then((response) => {
+        this.$http.post('attachment/findOne.json', requestBody).then((response) => {
           if (response.status == 200) {
             var responseJson = response.body;
             if (responseJson.errcode == 200) {

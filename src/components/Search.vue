@@ -61,7 +61,7 @@
         this.search(requestBody);
       },
       search(requestBody){
-        this.$http.post('article/search.json', requestBody).then((response) => {
+        this.$http.post('attachment/search.json', requestBody).then((response) => {
           if (response.status == 200) {
             var responseJson = response.body;
             if (responseJson.errcode == 200) {
